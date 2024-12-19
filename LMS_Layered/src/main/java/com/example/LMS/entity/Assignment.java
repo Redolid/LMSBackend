@@ -16,6 +16,10 @@ public class Assignment {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+    private String title;
+    
+    private String description;
+    
     private User student;
 
     private String filePath; // Location of uploaded file
@@ -35,6 +39,22 @@ public class Assignment {
 
     public Course getCourse() {
         return course;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setCourse(Course course) {

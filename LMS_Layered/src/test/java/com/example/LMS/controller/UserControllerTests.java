@@ -37,8 +37,15 @@ class UserControllerTests {
     @BeforeEach
     void setUp() {
         // Set up test data
-        userResponseDTO = new UserResponseDTO(1L, "john.doe@example.com", "John Doe");
-        userRequestDTO = new UserRequestDTO("john.doe@example.com", "password123", "John Doe");
+    	UserResponseDTO userResponseDTO = new UserResponseDTO();
+    	userResponseDTO.setId(1L);
+    	userResponseDTO.setEmail("john.doe@example.com");
+    	userResponseDTO.setUsername("John Doe");
+
+    	UserRequestDTO userRequestDTO = new UserRequestDTO();
+    	userRequestDTO.setEmail("john.doe@example.com");
+    	userRequestDTO.setPassword("password123");
+    	userRequestDTO.setUsername("John Doe");
     }
 
     @Test

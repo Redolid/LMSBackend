@@ -71,4 +71,14 @@ public class UserService {
         dto.setEmail(user.getEmail());
         return dto;
     }
+
+    public User createUser(User user) {
+        // Encode password if it's not already encoded
+        if (user.getPassword() != null && !user.getPassword().startsWith("{bcrypt}")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        // Save the user to the repository
+        return userRepository.save(user);
+    }
 }

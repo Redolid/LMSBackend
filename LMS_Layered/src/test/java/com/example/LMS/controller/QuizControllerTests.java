@@ -39,12 +39,12 @@ class QuizControllerTests {
         // Set up test data
         quiz = new Quiz();
         quiz.setId(1L);
-        quiz.setName("Test Quiz");
+        quiz.setTitle("Test Quiz");
 
         question = new Question();
         question.setId(1L);
-        question.setText("What is 2 + 2?");
-        question.setAnswer("4");
+        question.setQuestionText("What is 2 + 2?");
+        question.setCorrectAnswer("4");
     }
 
     @Test

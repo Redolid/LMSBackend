@@ -39,12 +39,12 @@ class NotificationControllerTests {
         // Setting up test data
         notificationRequestDTO = new NotificationRequestDTO();
         notificationRequestDTO.setMessage("New notification message");
-        notificationRequestDTO.setUsername("testUser");
+        notificationRequestDTO.setRecipientUsername("testUser");
 
         notificationResponseDTO = new NotificationResponseDTO();
         notificationResponseDTO.setId(1L);
         notificationResponseDTO.setMessage("New notification message");
-        notificationResponseDTO.setUsername("testUser");
+        notificationResponseDTO.setRecipientUsername("testUser");
         notificationResponseDTO.setRead(false);
     }
 

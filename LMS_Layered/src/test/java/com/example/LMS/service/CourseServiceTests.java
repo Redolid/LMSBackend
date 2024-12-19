@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +52,7 @@ class CourseServiceTests {
         when(courseRepository.save(any(Course.class))).thenReturn(course);
 
         // Call the method to add a course
-        Course createdCourse = courseService.addCourse(courseRequestDTO);
+        Course createdCourse = courseService.addCourse(courseRequestDTO, anyLong());
 
         // Verify that the method worked and the returned course is correct
         assertNotNull(createdCourse);

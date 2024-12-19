@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,7 +50,7 @@ class CourseControllerTests {
 
     @Test
     void testAddCourse() throws Exception {
-        when(courseService.addCourse(any(CourseRequestDTO.class))).thenReturn(course);
+        when(courseService.addCourse(any(CourseRequestDTO.class), anyLong())).thenReturn(course);
 
         mockMvc.perform(post("/api/courses")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,7 +60,7 @@ class CourseControllerTests {
                 .andExpect(jsonPath("$.name").value("Mathematics 101"))
                 .andExpect(jsonPath("$.description").value("Introductory math course"));
 
-        verify(courseService, times(1)).addCourse(any(CourseRequestDTO.class));
+        verify(courseService, times(1)).addCourse(any(CourseRequestDTO.class), anyLong());
     }
 
     @Test
