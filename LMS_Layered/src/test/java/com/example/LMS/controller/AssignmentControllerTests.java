@@ -1,4 +1,4 @@
-package com.example.LMS;
+package com.example.LMS.controller;
 
 import com.example.LMS.controller.AssignmentController;
 import com.example.LMS.entity.Assignment;

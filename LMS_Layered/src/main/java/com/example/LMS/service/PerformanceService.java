@@ -2,7 +2,7 @@ package com.example.LMS.service;
 
 import com.example.LMS.entity.Performance;
 import com.example.LMS.repository.PerformanceRepository;
-import com.example.LMS.util.NotificationUtil;
+import com.example.LMS.utils.NotificationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class PerformanceService {
     private PerformanceRepository performanceRepository;
 
     @Autowired
-    private NotificationUtil notificationUtil;
+    private NotificationUtils notificationUtil;
 
     public List<Performance> getPerformanceByCourse(Long courseId) {
         return performanceRepository.findByCourseId(courseId);
@@ -28,7 +28,7 @@ public class PerformanceService {
     public Performance updatePerformance(Performance performance) {
         Performance updatedPerformance = performanceRepository.save(performance);
         notificationUtil.sendNotificationToUser(
-                "Your performance has been updated for course: " + performance.getCourse().getName(),
+                "Your performance has been updated for course: " + performance.getCourse().getTitle(),
                 performance.getStudent().getId()
         );
         return updatedPerformance;

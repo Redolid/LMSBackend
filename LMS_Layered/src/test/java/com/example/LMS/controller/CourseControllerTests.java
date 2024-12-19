@@ -39,11 +39,11 @@ class CourseControllerTests {
         // Setting up test data
         course = new Course();
         course.setId(1L);
-        course.setName("Mathematics 101");
+        course.setTitle("Mathematics 101");
         course.setDescription("Introductory math course");
 
         courseRequestDTO = new CourseRequestDTO();
-        courseRequestDTO.setName("Mathematics 101");
+        courseRequestDTO.setTitle("Mathematics 101");
         courseRequestDTO.setDescription("Introductory math course");
     }
 
