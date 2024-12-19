@@ -14,6 +14,11 @@ public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+    
+    @GetMapping
+    public String testEndpoint() {
+        return "Hello, From Question Controller!";
+    }
 
    
     @GetMapping("/quiz/{quizId}")

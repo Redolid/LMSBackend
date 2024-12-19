@@ -18,7 +18,7 @@ public class AssignmentController {
     
     @GetMapping
     public String testEndpoint() {
-        return "Testing, From Assignment Component!";
+        return "Hello, From Assignment Controller!";
     }
 
     @PostMapping

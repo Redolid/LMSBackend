@@ -17,7 +17,7 @@ public class QuizController {
     
     @GetMapping
 	 public String testEndpoint() {
-	       return "Testing, From Quiz Component!";
+	       return "Hello, From Quiz Controller!";
 	 }
 
 

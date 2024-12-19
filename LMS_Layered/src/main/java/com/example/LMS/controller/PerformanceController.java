@@ -14,6 +14,11 @@ public class PerformanceController {
 
     @Autowired
     private PerformanceService performanceService;
+    
+    @GetMapping
+    public String testEndpoint() {
+        return "Hello, From Performance Controller!";
+    }
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<Performance>> getPerformanceByCourse(@PathVariable Long courseId) {

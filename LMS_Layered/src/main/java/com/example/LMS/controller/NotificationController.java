@@ -18,7 +18,7 @@ public class NotificationController {
     
     @GetMapping
     public String testEndpoint() {
-        return "Testing, From Notification Component!";
+        return "Hello, From Notification Controller!";
     }
 
     @PostMapping
