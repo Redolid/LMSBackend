@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class PerformanceServiceTest {
+class PerformanceServiceTests {
 
     @Mock
     private PerformanceRepository performanceRepository;
