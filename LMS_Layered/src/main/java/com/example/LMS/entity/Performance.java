@@ -23,7 +23,8 @@ public class Performance {
     private int attendance; // Attendance percentage
     private String overallPerformance; // e.g., Excellent, Good, Needs Improvement
     
- // Getters and Setters
+ 
+	// Getters and Setters
     public Long getId() {
         return id;
     }

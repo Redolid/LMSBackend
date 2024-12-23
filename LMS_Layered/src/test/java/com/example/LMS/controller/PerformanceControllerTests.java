@@ -39,7 +39,7 @@ class PerformanceControllerTests {
         // Mocking the service response
         Performance performance = new Performance();
         performance.setId(1L);
-        performance.setScore(95.0);
+        performance.setQuizScore(95.0);
         List<Performance> performanceList = Collections.singletonList(performance);
 
         Mockito.when(performanceService.getPerformanceByCourse(1L)).thenReturn(performanceList);
@@ -55,7 +55,7 @@ class PerformanceControllerTests {
         // Mocking the service response
         Performance performance = new Performance();
         performance.setId(2L);
-        performance.setScore(85.0);
+        performance.setQuizScore(85.0);
         List<Performance> performanceList = Collections.singletonList(performance);
 
         Mockito.when(performanceService.getPerformanceByStudent(1L)).thenReturn(performanceList);
@@ -71,7 +71,7 @@ class PerformanceControllerTests {
         // Mocking the service response
         Performance performance = new Performance();
         performance.setId(1L);
-        performance.setScore(90.0);
+        performance.setQuizScore(90.0);
 
         Mockito.when(performanceService.updatePerformance(any(Performance.class))).thenReturn(performance);
 

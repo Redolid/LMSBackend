@@ -1,5 +1,7 @@
 package com.example.LMS.service;
 
+import com.example.LMS.entity.User;
+import com.example.LMS.entity.Course;
 import com.example.LMS.entity.Performance;
 import com.example.LMS.repository.PerformanceRepository;
 import com.example.LMS.utils.NotificationUtils;
@@ -27,90 +29,115 @@ class PerformanceServiceTests {
     @InjectMocks
     private PerformanceService performanceService;
 
+    private Course course;
+    private User student1;
+    private User student2;
+    private Performance performance1;
+    private Performance performance2;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        // Initialize reusable objects
+        course = new Course();
+        course.setId(1L);
+        course.setTitle("Course 1");
+
+        student1 = new User();
+        student1.setId(1L);
+        student1.setUsername("Student 1");
+
+        student2 = new User();
+        student2.setId(2L);
+        student2.setUsername("Student 2");
+
+        performance1 = new Performance();
+        performance1.setId(1L);
+        performance1.setCourse(course);
+        performance1.setStudent(student1);
+        performance1.setQuizScore(80.0);
+        performance1.setOverallPerformance("Good");
+
+        performance2 = new Performance();
+        performance2.setId(2L);
+        performance2.setCourse(course);
+        performance2.setStudent(student2);
+        performance2.setQuizScore(95.0);
+        performance2.setOverallPerformance("Excellent");
     }
 
     @Test
     void testGetPerformanceByCourse() {
-        Long courseId = 1L;
-        List<Performance> mockPerformances = Arrays.asList(
-                new Performance(1L, courseId, 1L, 80.0, 90, 5, "Good"),
-                new Performance(2L, courseId, 2L, 95.0, 95, 6, "Excellent")
-        );
+        when(performanceRepository.findByCourseId(course.getId()))
+                .thenReturn(Arrays.asList(performance1, performance2));
 
-        when(performanceRepository.findByCourseId(courseId)).thenReturn(mockPerformances);
-
-        List<Performance> result = performanceService.getPerformanceByCourse(courseId);
+        List<Performance> result = performanceService.getPerformanceByCourse(course.getId());
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(performanceRepository, times(1)).findByCourseId(courseId);
+        verify(performanceRepository, times(1)).findByCourseId(course.getId());
     }
 
     @Test
     void testGetPerformanceByStudent() {
-        Long studentId = 1L;
-        List<Performance> mockPerformances = Arrays.asList(
-                new Performance(1L, 1L, studentId, 85.0, 90, 5, "Excellent")
-        );
+        when(performanceRepository.findByStudentId(student1.getId()))
+                .thenReturn(Arrays.asList(performance1));
 
-        when(performanceRepository.findByStudentId(studentId)).thenReturn(mockPerformances);
-
-        List<Performance> result = performanceService.getPerformanceByStudent(studentId);
+        List<Performance> result = performanceService.getPerformanceByStudent(student1.getId());
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        verify(performanceRepository, times(1)).findByStudentId(studentId);
+        assertEquals("Good", result.get(0).getOverallPerformance());
+        verify(performanceRepository, times(1)).findByStudentId(student1.getId());
     }
 
     @Test
     void testUpdatePerformance() {
-        Performance performance = new Performance(1L, 1L, 1L, 88.0, 92, 6, "Good");
-        Performance updatedPerformance = new Performance(1L, 1L, 1L, 90.0, 95, 7, "Excellent");
+        performance1.setOverallPerformance("Needs Improvement");
 
-        when(performanceRepository.save(performance)).thenReturn(updatedPerformance);
+        when(performanceRepository.save(performance1)).thenReturn(performance1);
 
-        Performance result = performanceService.updatePerformance(performance);
+        Performance result = performanceService.updatePerformance(performance1);
 
         assertNotNull(result);
-        assertEquals("Excellent", result.getOverallPerformance());
-        verify(performanceRepository, times(1)).save(performance);
+        assertEquals("Needs Improvement", result.getOverallPerformance());
+        verify(performanceRepository, times(1)).save(performance1);
         verify(notificationUtils, times(1)).sendNotificationToUser(
-                "Your performance has been updated for course: " + performance.getCourse().getTitle(),
-                performance.getStudent().getId()
+                "Your performance has been updated for course: " + course.getTitle(),
+                student1.getId()
         );
     }
 
     @Test
     void testCalculateOverallPerformance_Excellent() {
-        Performance performance = new Performance(1L, 1L, 1L, 90.0, 95, 6, "Good");
+        performance1.setQuizScore(90.0);
 
-        performanceService.calculateOverallPerformance(performance);
+        performanceService.calculateOverallPerformance(performance1);
 
-        assertEquals("Excellent", performance.getOverallPerformance());
-        verify(performanceRepository, times(1)).save(performance);
+        assertEquals("Excellent", performance1.getOverallPerformance());
+        verify(performanceRepository, times(1)).save(performance1);
     }
-
+    
     @Test
     void testCalculateOverallPerformance_Good() {
-        Performance performance = new Performance(1L, 1L, 1L, 75.0, 80, 4, "Needs Improvement");
+    	performance1.setQuizScore(75.0);
 
-        performanceService.calculateOverallPerformance(performance);
+        performanceService.calculateOverallPerformance(performance1);
 
-        assertEquals("Good", performance.getOverallPerformance());
-        verify(performanceRepository, times(1)).save(performance);
+        assertEquals("Good", performance1.getOverallPerformance());
+        verify(performanceRepository, times(1)).save(performance1);
     }
 
     @Test
     void testCalculateOverallPerformance_NeedsImprovement() {
-        Performance performance = new Performance(1L, 1L, 1L, 60.0, 70, 2, "Good");
+        performance1.setQuizScore(50.0);
 
-        performanceService.calculateOverallPerformance(performance);
+        performanceService.calculateOverallPerformance(performance1);
 
-        assertEquals("Needs Improvement", performance.getOverallPerformance());
-        verify(performanceRepository, times(1)).save(performance);
+        assertEquals("Needs Improvement", performance1.getOverallPerformance());
+        verify(performanceRepository, times(1)).save(performance1);
     }
 }
+
 
