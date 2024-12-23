@@ -1,6 +1,7 @@
 package com.example.LMS.service;
 
 import com.example.LMS.entity.Question;
+import com.example.LMS.entity.Quiz;
 import com.example.LMS.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,32 +24,70 @@ class QuestionServiceTests {
     @InjectMocks
     private QuestionService questionService;
 
+    private Question question1;
+    private Question question2;
+    private Question newQuestion;
+    private Question updatedQuestion;
+    private Quiz quiz;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        // Initialize shared objects
+        quiz = new Quiz();
+        quiz.setId(1L);
+        quiz.setTitle("Sample Quiz");
+
+        question1 = new Question();
+        question1.setId(1L);
+        question1.setQuestionText("Question 1");
+        question1.setQuestionType("MCQ");
+        question1.setCorrectAnswer("Option A");
+        question1.setQuiz(quiz);
+
+        question2 = new Question();
+        question2.setId(2L);
+        question2.setQuestionText("Question 2");
+        question2.setQuestionType("MCQ");
+        question2.setCorrectAnswer("Option B");
+        question2.setQuiz(quiz);
+
+        newQuestion = new Question();
+        newQuestion.setQuestionText("New Question");
+        newQuestion.setQuestionType("MCQ");
+        newQuestion.setCorrectAnswer("Option A");
+        newQuestion.setQuiz(quiz);
+
+        updatedQuestion = new Question();
+        updatedQuestion.setId(1L);
+        updatedQuestion.setQuestionText("Updated Question");
+        updatedQuestion.setQuestionType("MCQ");
+        updatedQuestion.setCorrectAnswer("Option B");
+        updatedQuestion.setQuiz(quiz);
     }
 
     @Test
     void testGetQuestionsByQuiz() {
-        Long quizId = 1L;
-        List<Question> mockQuestions = Arrays.asList(
-                new Question(1L, "Question 1", "MCQ", "Option A", 1L),
-                new Question(2L, "Question 2", "MCQ", "Option B", 1L)
-        );
+        List<Question> mockQuestions = Arrays.asList(question1, question2);
 
-        when(questionRepository.findAllByQuizId(quizId)).thenReturn(mockQuestions);
+        when(questionRepository.findAllByQuizId(quiz.getId())).thenReturn(mockQuestions);
 
-        List<Question> result = questionService.getQuestionsByQuiz(quizId);
+        List<Question> result = questionService.getQuestionsByQuiz(quiz.getId());
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(questionRepository, times(1)).findAllByQuizId(quizId);
+        verify(questionRepository, times(1)).findAllByQuizId(quiz.getId());
     }
 
     @Test
     void testAddQuestion() {
-        Question newQuestion = new Question(null, "New Question", "MCQ", "Option A", 1L);
-        Question savedQuestion = new Question(1L, "New Question", "MCQ", "Option A", 1L);
+        Question savedQuestion = new Question();
+        savedQuestion.setId(1L);
+        savedQuestion.setQuestionText(newQuestion.getQuestionText());
+        savedQuestion.setQuestionType(newQuestion.getQuestionType());
+        savedQuestion.setCorrectAnswer(newQuestion.getCorrectAnswer());
+        savedQuestion.setQuiz(newQuestion.getQuiz());
 
         when(questionRepository.save(newQuestion)).thenReturn(savedQuestion);
 
@@ -56,31 +95,30 @@ class QuestionServiceTests {
 
         assertNotNull(result);
         assertEquals(savedQuestion.getId(), result.getId());
+        assertEquals(savedQuestion.getQuiz(), result.getQuiz());
         verify(questionRepository, times(1)).save(newQuestion);
     }
 
     @Test
     void testUpdateQuestion() {
         Long questionId = 1L;
-        Question existingQuestion = new Question(questionId, "Old Question", "MCQ", "Option A", 1L);
-        Question updatedQuestion = new Question(questionId, "Updated Question", "MCQ", "Option B", 1L);
 
-        when(questionRepository.findById(questionId)).thenReturn(Optional.of(existingQuestion));
-        when(questionRepository.save(existingQuestion)).thenReturn(updatedQuestion);
+        when(questionRepository.findById(questionId)).thenReturn(Optional.of(question1));
+        when(questionRepository.save(question1)).thenReturn(updatedQuestion);
 
         Question result = questionService.updateQuestion(questionId, updatedQuestion);
 
         assertNotNull(result);
         assertEquals("Updated Question", result.getQuestionText());
         assertEquals("Option B", result.getCorrectAnswer());
+        assertEquals(quiz, result.getQuiz());
         verify(questionRepository, times(1)).findById(questionId);
-        verify(questionRepository, times(1)).save(existingQuestion);
+        verify(questionRepository, times(1)).save(question1);
     }
 
     @Test
     void testUpdateQuestionNotFound() {
         Long questionId = 1L;
-        Question updatedQuestion = new Question(questionId, "Updated Question", "MCQ", "Option B", 1L);
 
         when(questionRepository.findById(questionId)).thenReturn(Optional.empty());
 
