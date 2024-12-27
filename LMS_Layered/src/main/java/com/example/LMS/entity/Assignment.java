@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Assignment {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -16,11 +16,11 @@ public class Assignment {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    private String title;
-    
-    private String description;
-    
     private User student;
+
+    private String title; // Title is a simple String, not a relationship
+
+    private String description;
 
     private String filePath; // Location of uploaded file
 
